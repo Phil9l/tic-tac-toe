@@ -35,9 +35,6 @@ class RandomPlayer(PlayerBase):
     def get_move(self):
         moves = list(self._game.field.empty_positions)
         if moves:
-            # import time
-            # time.sleep(1)
-
             return random.choice(moves)
 
 
@@ -48,7 +45,7 @@ class QPlayer(PlayerBase):
         self._epsilon = epsilon
 
     def get_move(self):
-        if random.random() < self._epsilon:
+        if len(self._Q_values) == 0 or random.random() < self._epsilon:
             player = RandomPlayer()
             player.set_mark(self._mark)
             player.set_game(self._game)

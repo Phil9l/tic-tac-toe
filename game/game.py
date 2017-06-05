@@ -31,6 +31,31 @@ class Game:
         self.gamma = 0.9
         self.alpha = 0.3
 
+    def __str__(self):
+        entity_repr = {
+            FieldEntities.CROSS: 'X',
+            FieldEntities.NOUGHT: 'O',
+            FieldEntities.EMPTY: ' ',
+        }
+        game_result_repr = {
+            GameResult.CROSS_WIN: 'X WINS!',
+            GameResult.NOUGHT_WIN: 'O WINS!',
+            GameResult.DRAW: 'DRAW!',
+        }
+        sep = '+' + '-+' * self._size
+        result = []
+
+        if self.is_over():
+            result.append(game_result_repr[self.get_result()])
+
+        result.append(sep)
+        for row in self._field.data:
+            srow = '|'
+            for val in row:
+                srow += '{}|'.format(entity_repr[val])
+            result.extend([srow, sep])
+        return '\n'.join(result)
+
     @property
     def current_player(self):
         return self._players[self._player_index]
@@ -100,10 +125,7 @@ class Game:
             expected = 0
             if self.current_player.mark == FieldEntities.CROSS:
                 expected = reward + (self.gamma * min(next_Q_values.values()))
-                # print('QVALUES:', next_Q_values.values())
             elif self.current_player.mark == FieldEntities.NOUGHT:
                 expected = reward + (self.gamma * max(next_Q_values.values()))
-                # print('QVALUES:', next_Q_values.values())
         difference = self.alpha * (expected - self._Q_values[state_key][move])
-        # print(reward, expected, difference)
         self._Q_values[state_key][move] += difference

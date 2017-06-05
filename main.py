@@ -37,6 +37,6 @@ if __name__ == '__main__':
     g = Game(player1=player1, player2=player2, Q_values=q_values)
 
     while not g.is_over():
-        print(g.field)
+        print(g)
         g.make_iteration()
-    print(g.field)
+    print(g)
